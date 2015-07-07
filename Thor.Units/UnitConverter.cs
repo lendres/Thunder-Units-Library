@@ -536,7 +536,7 @@ namespace Thor.Units
 			}
 
 			//Should never happen.
-			Debug.Fail("Unit error", "A unit that does not belong to any group has been detected in GetUnitGroup( ) - the unit was '" + unitName + "'.");
+			Debug.Fail("Unit error", "A unit that does not belong to any group has been detected in GetUnitGroup() - the unit was '" + unitName + "'.");
 			return null;
 		}
 		#endregion

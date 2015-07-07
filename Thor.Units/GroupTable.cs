@@ -20,7 +20,7 @@ namespace Thor.Units
 		/// </summary>
 		public GroupTable()
 		{
-			this.Clear( );
+			this.Clear();
 		}
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace Thor.Units
 		{
 			get
 			{
-				groupName = groupName.ToLower( );
+				groupName = groupName.ToLower();
 
 				//If we contain a group matching the key then return it.
 				if(this.Dictionary.Contains(groupName))
@@ -42,7 +42,7 @@ namespace Thor.Units
 			
 			set
 			{
-				groupName = groupName.ToLower( );
+				groupName = groupName.ToLower();
 
 				//Already added? Warn developer (this is probably not a good thing)
 				Debug.Assert( (!this.Dictionary.Contains(groupName)),
@@ -58,7 +58,7 @@ namespace Thor.Units
 		/// Gets an array of all the groups in the group table.
 		/// </summary>
 		/// <returns>Array of UnitGroup objects representing all of the groups in the group table.</returns>
-		public UnitGroup[] GetAllGroups( )
+		public UnitGroup[] GetAllGroups()
 		{
 			UnitGroup[] retval;
 
@@ -80,5 +80,5 @@ namespace Thor.Units
 			return retval;
 		}
 
-	}
-}
+	} // End class.
+} // End namespace.

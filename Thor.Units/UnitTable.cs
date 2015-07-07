@@ -20,7 +20,7 @@ namespace Thor.Units
 		/// </summary>
 		public UnitTable()
 		{
-			this.Clear( );
+			this.Clear();
 		}
 
 		/// <summary>
@@ -30,24 +30,26 @@ namespace Thor.Units
 		{
 			get
 			{
-				unitName = unitName.ToLower( );
+				unitName = unitName.ToLower();
 
 				//If we contain a unit matching the key then return it.
-				if(this.Dictionary.Contains(unitName))
+				if (this.Dictionary.Contains(unitName))
+				{
 					return (UnitEntry)this.Dictionary[unitName];
+				}
 				else
+				{
 					//Symbol doesn't exist.
 					return null;
+				}
 			}
 			
 			set
 			{
-				unitName = unitName.ToLower( );
+				unitName = unitName.ToLower();
 
 				//Already added? Warn developer (this is probably not a good thing)
-				Debug.Assert( (!this.Dictionary.Contains(unitName)),
-					"Unit table warning",
-					String.Format("The unit with name '{0}' has been overwritten.", unitName) );
+				Debug.Assert( (!this.Dictionary.Contains(unitName)), "Unit table warning", String.Format("The unit with name '{0}' has been overwritten.", unitName) );
 
 				//Link the unit and its name in the table
 				this.Dictionary[unitName] = value;
@@ -57,8 +59,7 @@ namespace Thor.Units
 		/// <summary>
 		/// Get a list of all the names of the UnitEntrys in this UnitTable.
 		/// </summary>
-		/// <returns></returns>
-		public string[] GetAllUnitNamesInGroup()
+		public string[] GetAllUnitNames()
 		{
 			string[] names = new string[this.Count];
 

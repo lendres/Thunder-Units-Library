@@ -20,7 +20,7 @@ namespace Thor.Units
 		/// </summary>
 		public SymbolTable()
 		{
-			this.Clear( );
+			Clear();
 		}
 
 		/// <summary>
@@ -31,23 +31,26 @@ namespace Thor.Units
 			get
 			{
 				//If we contain a symbol matching the key then return it.
-				if(this.Dictionary.Contains(symbolName))
+				if (this.Dictionary.Contains(symbolName))
+				{
 					return (UnitEntry)this.Dictionary[symbolName];
+				}
 				else
+				{
 					//Symbol doesn't exist
 					return null;
+				}
 			}
 			
 			set
 			{
-				//Already added? Warn developer (this is probably not a good thing)
-				Debug.Assert( (!this.Dictionary.Contains(symbolName)),
-								"Symbol table warning",
-								String.Format("The symbol '{0}' has been overwritten.", symbolName) );
+				// Already added? Warn developer (this is probably not a good thing).
+				Debug.Assert((!this.Dictionary.Contains(symbolName)), "Symbol table warning", String.Format("The symbol '{0}' has been overwritten.", symbolName));
 
 				//Link the symbol to the unit
 				this.Dictionary[symbolName] = value;
 			} 
 		}
-	}
-}
+
+	} // End class.
+} // End namespace.

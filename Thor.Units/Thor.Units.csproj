@@ -106,6 +106,7 @@
     <Compile Include="IUnitEntry.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Table.cs" />
     <Compile Include="UnitConstants.cs">
       <SubType>Code</SubType>
     </Compile>

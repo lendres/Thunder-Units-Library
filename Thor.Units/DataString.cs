@@ -11,22 +11,22 @@ namespace Thor.Units
 	[Flags]
 	public enum DataStringFlags : int
 	{
-		None		=	0,
+		None,
 
 		/// <summary>
 		/// Stops the data string unit being changed by reading user input.
 		/// </summary>
-		ForceUnit	=	1,
+		ForceUnit,
 
 		/// <summary>
 		/// Enforces a maximum value on the data string.
 		/// </summary>
-		UseMaxBound	=	2,
+		UseMaxBound,
 
 		/// <summary>
 		/// Enforces a minimum value on the data string.
 		/// </summary>
-		UseMinBound	=	4,
+		UseMinBound
 	}
 
 	/// <summary>
@@ -46,6 +46,8 @@ namespace Thor.Units
 		public event EventHandler OnValueChanged;
 		public event EventHandler OnUnitChanged;
 
+		asdf[i]
+
 		internal DataString(UnitConverter uc, string unitSymbol)
 		{
 			//Reference the unit converter that created us.
@@ -56,7 +58,7 @@ namespace Thor.Units
 			//Default unit is the blank unit
 			m_unit = m_uc.GetUnitBySymbol(unitSymbol);
 
-			if(m_unit == null)
+			if (m_unit == null)
 				m_unit = m_uc.GetUnitBySymbol("");
 
 			m_value = 0.0;
@@ -72,17 +74,17 @@ namespace Thor.Units
 		{
 			IUnitEntry unit = m_uc.GetUnitBySymbol(unitSymbol);
 
-			if(unit == null)
+			if (unit == null)
 				return UnitResult.BadUnit;
 			else
 			{
 				//If its the same don't touch it.
-				if(unit == m_unit)
+				if (unit == m_unit)
 					return UnitResult.NoError;
 
 				m_unit = unit;
 
-				if(OnUnitChanged != null)
+				if (OnUnitChanged != null)
 					OnUnitChanged(this, EventArgs.Empty);
 
 				return UnitResult.NoError;
@@ -94,7 +96,10 @@ namespace Thor.Units
 		/// </summary>
 		public IUnitEntry Unit
 		{
-			get{ return m_unit; }
+			get
+			{
+				return m_unit;
+			}
 		}
 
 		/// <summary>
@@ -102,8 +107,14 @@ namespace Thor.Units
 		/// </summary>
 		public DataStringFlags Flags
 		{
-			get{ return m_flags; }
-			set{ m_flags = value; }
+			get
+			{
+				return m_flags;
+			}
+			set
+			{
+				m_flags = value;
+			}
 		}
 
 		/// <summary>
@@ -111,7 +122,10 @@ namespace Thor.Units
 		/// </summary>
 		public IUnitConverter Converter
 		{
-			get{ return m_uc; }
+			get
+			{
+				return m_uc;
+			}
 		}
 		#endregion
 
@@ -128,13 +142,13 @@ namespace Thor.Units
 			UnitResult res;
 
 			res = ValidateEntry(entry);
-			if(res != UnitResult.NoError)
+			if (res != UnitResult.NoError)
 				return res;
 
 			m_uc.ParseUnitString(entry, out d, out unit);
 
 			//Can we change the unit?
-			if((m_flags & DataStringFlags.ForceUnit) > 0)
+			if ((m_flags & DataStringFlags.ForceUnit) > 0)
 				//Cant change the unit, so turn the given units into the unit we want
 				m_uc.ConvertUnits(d, unit, m_unit.Name, out d);
 			else
@@ -155,10 +169,10 @@ namespace Thor.Units
 			UnitResult res;
 			res = m_uc.ConvertToStandard(val, m_unit.Name, out m_value);
 
-			if(res != UnitResult.NoError)
+			if (res != UnitResult.NoError)
 				return res;
 
-			if(OnValueChanged != null)
+			if (OnValueChanged != null)
 				OnValueChanged(this, EventArgs.Empty);
 
 			return res;
@@ -188,10 +202,10 @@ namespace Thor.Units
 			UnitResult res;
 			res = m_uc.ConvertFromStandard(m_value, m_unit.Name, out d);
 
-			if(res != UnitResult.NoError)
+			if (res != UnitResult.NoError)
 				return res;
 
-			output = d.ToString( ) + " " + m_unit.DefaultSymbol;
+			output = d.ToString() + " " + m_unit.DefaultSymbol;
 
 			return res;
 		}
@@ -221,14 +235,14 @@ namespace Thor.Units
 
 			//Convert the standard stored value into the current unit.
 			UnitResult res = m_uc.ConvertFromStandard(m_value, unitSymbol, out d);
-			if(res != UnitResult.NoError)
+			if (res != UnitResult.NoError)
 				return res;
 
 			//Get a reference to the unit.
 			IUnitEntry unit = m_uc.GetUnitBySymbol(unitSymbol);
 
 			//Output the result
-			output = d.ToString( ) + " " + unit.DefaultSymbol;
+			output = d.ToString() + " " + unit.DefaultSymbol;
 			return res;
 		}
 		#endregion
@@ -247,24 +261,24 @@ namespace Thor.Units
 
 			//Parse the entry
 			res = m_uc.ParseUnitString(entry, out d, out unit);
-			if(res != UnitResult.NoError)
+			if (res != UnitResult.NoError)
 				return res;
 
 			//Make sure the units are compatible
-			if(!m_uc.CompatibleUnits(unit, this.m_unit.DefaultSymbol))
+			if (!m_uc.CompatibleUnits(unit, this.m_unit.DefaultSymbol))
 				return UnitResult.UnitMismatch;
 
 			m_uc.ConvertToStandard(d, unit, out x);
 
-			if((this.m_flags & DataStringFlags.UseMaxBound) > 0)
+			if ((this.m_flags & DataStringFlags.UseMaxBound) > 0)
 			{
-				if(x > this.m_maxbound)
+				if (x > this.m_maxbound)
 					return UnitResult.ValueTooHigh;
 			}
 
-			if((this.m_flags & DataStringFlags.UseMinBound) > 0)
+			if ((this.m_flags & DataStringFlags.UseMinBound) > 0)
 			{
-				if(x < this.m_minbound)
+				if (x < this.m_minbound)
 					return UnitResult.ValueTooLow;
 			}
 
@@ -281,7 +295,7 @@ namespace Thor.Units
 		/// <returns>Unit result value.</returns>
 		public UnitResult SetMaxBound(double maxbound, string unitSymbol)
 		{
-			if(!m_uc.CompatibleUnits(unitSymbol, this.m_unit.DefaultSymbol))
+			if (!m_uc.CompatibleUnits(unitSymbol, this.m_unit.DefaultSymbol))
 				return UnitResult.UnitMismatch;
 
 			m_uc.ConvertToStandard(maxbound, unitSymbol, out this.m_maxbound);
@@ -297,7 +311,7 @@ namespace Thor.Units
 		/// <returns>Unit result value.</returns>
 		public UnitResult SetMinBound(double minbound, string unitSymbol)
 		{
-			if(!m_uc.CompatibleUnits(unitSymbol, this.m_unit.DefaultSymbol))
+			if (!m_uc.CompatibleUnits(unitSymbol, this.m_unit.DefaultSymbol))
 				return UnitResult.UnitMismatch;
 
 			m_uc.ConvertToStandard(minbound, unitSymbol, out this.m_minbound);
@@ -311,113 +325,113 @@ namespace Thor.Units
 		/// Gets a string representation of the data string.
 		/// </summary>
 		/// <returns>The string representation of the data string.</returns>
-		public override string ToString( )
+		public override string ToString()
 		{
 			UnitResult res;
 			string s;
 
 			res = this.GetValue(out s);
-			if(res != UnitResult.NoError)
+			if (res != UnitResult.NoError)
 				return "ERROR!";
 			else
 				return s;
 		}
 
-        /// <summary>
-        /// Adds two datastrings together.
-        /// </summary>
-        public static DataString operator +(DataString d1, DataString d2)
-        {
-            DataString result = new DataString((UnitConverter)d1.Converter, d1.Unit.DefaultSymbol);
-            double x = 0.0;
-            double y = 0.0;
-            double z = 0.0;
+		/// <summary>
+		/// Adds two datastrings together.
+		/// </summary>
+		public static DataString operator +(DataString d1, DataString d2)
+		{
+			DataString result = new DataString((UnitConverter)d1.Converter, d1.Unit.DefaultSymbol);
+			double x = 0.0;
+			double y = 0.0;
+			double z = 0.0;
 
-            d1.GetValue(out x);
-            d1.Converter.ConvertToStandard(x, d1.Unit.DefaultSymbol, out x);
+			d1.GetValue(out x);
+			d1.Converter.ConvertToStandard(x, d1.Unit.DefaultSymbol, out x);
 
-            d2.GetValue(out y);
-            d2.Converter.ConvertToStandard(y, d2.Unit.DefaultSymbol, out y);
+			d2.GetValue(out y);
+			d2.Converter.ConvertToStandard(y, d2.Unit.DefaultSymbol, out y);
 
-            z = x + y;
-            d1.Converter.ConvertFromStandard(z, d1.Unit.DefaultSymbol, out z);
+			z = x + y;
+			d1.Converter.ConvertFromStandard(z, d1.Unit.DefaultSymbol, out z);
 
-            result.SetUnit(d1.Unit.DefaultSymbol);
-            result.SetValue(z);
-            return result;
-        }
+			result.SetUnit(d1.Unit.DefaultSymbol);
+			result.SetValue(z);
+			return result;
+		}
 
-        /// <summary>
-        /// Subtracts two datastrings.
-        /// </summary>
-        public static DataString operator -(DataString d1, DataString d2)
-        {
-            DataString result = new DataString((UnitConverter)d1.Converter, d1.Unit.DefaultSymbol);
-            double x = 0.0;
-            double y = 0.0;
-            double z = 0.0;
+		/// <summary>
+		/// Subtracts two datastrings.
+		/// </summary>
+		public static DataString operator -(DataString d1, DataString d2)
+		{
+			DataString result = new DataString((UnitConverter)d1.Converter, d1.Unit.DefaultSymbol);
+			double x = 0.0;
+			double y = 0.0;
+			double z = 0.0;
 
-            d1.GetValue(out x);
-            d1.Converter.ConvertToStandard(x, d1.Unit.DefaultSymbol, out x);
+			d1.GetValue(out x);
+			d1.Converter.ConvertToStandard(x, d1.Unit.DefaultSymbol, out x);
 
-            d2.GetValue(out y);
-            d2.Converter.ConvertToStandard(y, d2.Unit.DefaultSymbol, out y);
+			d2.GetValue(out y);
+			d2.Converter.ConvertToStandard(y, d2.Unit.DefaultSymbol, out y);
 
-            z = x - y;
-            d1.Converter.ConvertFromStandard(z, d1.Unit.DefaultSymbol, out z);
+			z = x - y;
+			d1.Converter.ConvertFromStandard(z, d1.Unit.DefaultSymbol, out z);
 
-            result.SetUnit(d1.Unit.DefaultSymbol);
-            result.SetValue(z);
-            return result;
-        }
+			result.SetUnit(d1.Unit.DefaultSymbol);
+			result.SetValue(z);
+			return result;
+		}
 
-        /// <summary>
-        /// Multiplies two datastrings.
-        /// </summary>
-        public static DataString operator *(DataString d1, DataString d2)
-        {
-            DataString result = new DataString((UnitConverter)d1.Converter, d1.Unit.DefaultSymbol);
-            double x = 0.0;
-            double y = 0.0;
-            double z = 0.0;
+		/// <summary>
+		/// Multiplies two datastrings.
+		/// </summary>
+		public static DataString operator *(DataString d1, DataString d2)
+		{
+			DataString result = new DataString((UnitConverter)d1.Converter, d1.Unit.DefaultSymbol);
+			double x = 0.0;
+			double y = 0.0;
+			double z = 0.0;
 
-            d1.GetValue(out x);
-            d1.Converter.ConvertToStandard(x, d1.Unit.DefaultSymbol, out x);
+			d1.GetValue(out x);
+			d1.Converter.ConvertToStandard(x, d1.Unit.DefaultSymbol, out x);
 
-            d2.GetValue(out y);
-            d2.Converter.ConvertToStandard(y, d2.Unit.DefaultSymbol, out y);
+			d2.GetValue(out y);
+			d2.Converter.ConvertToStandard(y, d2.Unit.DefaultSymbol, out y);
 
-            z = x * y;
-            d1.Converter.ConvertFromStandard(z, d1.Unit.DefaultSymbol, out z);
+			z = x * y;
+			d1.Converter.ConvertFromStandard(z, d1.Unit.DefaultSymbol, out z);
 
-            result.SetUnit(d1.Unit.DefaultSymbol);
-            result.SetValue(z);
-            return result;
-        }
+			result.SetUnit(d1.Unit.DefaultSymbol);
+			result.SetValue(z);
+			return result;
+		}
 
-        /// <summary>
-        /// Divides two datastrings.
-        /// </summary>
-        public static DataString operator /(DataString d1, DataString d2)
-        {
-            DataString result = new DataString((UnitConverter)d1.Converter, d1.Unit.DefaultSymbol);
-            double x = 0.0;
-            double y = 0.0;
-            double z = 0.0;
+		/// <summary>
+		/// Divides two datastrings.
+		/// </summary>
+		public static DataString operator /(DataString d1, DataString d2)
+		{
+			DataString result = new DataString((UnitConverter)d1.Converter, d1.Unit.DefaultSymbol);
+			double x = 0.0;
+			double y = 0.0;
+			double z = 0.0;
 
-            d1.GetValue(out x);
-            d1.Converter.ConvertToStandard(x, d1.Unit.DefaultSymbol, out x);
+			d1.GetValue(out x);
+			d1.Converter.ConvertToStandard(x, d1.Unit.DefaultSymbol, out x);
 
-            d2.GetValue(out y);
-            d2.Converter.ConvertToStandard(y, d2.Unit.DefaultSymbol, out y);
+			d2.GetValue(out y);
+			d2.Converter.ConvertToStandard(y, d2.Unit.DefaultSymbol, out y);
 
-            z = x / y;
-            d1.Converter.ConvertFromStandard(z, d1.Unit.DefaultSymbol, out z);
+			z = x / y;
+			d1.Converter.ConvertFromStandard(z, d1.Unit.DefaultSymbol, out z);
 
-            result.SetUnit(d1.Unit.DefaultSymbol);
-            result.SetValue(z);
-            return result;
-        }
+			result.SetUnit(d1.Unit.DefaultSymbol);
+			result.SetValue(z);
+			return result;
+		}
 		#endregion
 	}
 }

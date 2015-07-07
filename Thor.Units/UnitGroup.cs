@@ -20,9 +20,9 @@ namespace Thor.Units
 
 		#region Construction
 
-		public UnitGroup( )
+		public UnitGroup()
 		{
-			m_Units = new UnitTable( );
+			m_Units = new UnitTable();
 		}
 
 		#endregion
