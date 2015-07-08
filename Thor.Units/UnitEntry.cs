@@ -9,87 +9,99 @@ namespace Thor.Units
 	/// <summary>
 	/// Represents a single unit loaded from the units file.
 	/// </summary>
-    public class UnitEntry : IUnitEntry
+	public class UnitEntry : IUnitEntry
 	{
-        private string m_Name;
-        private string m_DefaultSymbol;
-        private double m_PreAdder;
-        private double m_Adder;
-        private double m_Multiplier;
+		#region Members
+
+		private string					m_Name;
+		private string					m_DefaultSymbol;
+		private double					m_PreAdder;
+		private double					m_Adder;
+		private double					m_Multiplier;
+
+		#endregion
+
+		#region Construction
 
 		public UnitEntry()
 		{
-			m_Name = "";
+			m_Name          = "";
 			m_DefaultSymbol = "";
-			m_PreAdder = 0.0;
-			m_Adder = 0.0;
-			m_Multiplier = 0.0;
+			m_PreAdder      = 0.0;
+			m_Adder         = 0.0;
+			m_Multiplier    = 0.0;
 		}
 
-        public string Name
-        {
-            get
+		#endregion
+
+		#region Properties
+
+		public string Name
+		{
+			get
 			{
 				return m_Name;
 			}
 
-            set
+			set
 			{
 				m_Name = value;
 			}
-        }
+		}
 
-        public string DefaultSymbol
-        {
-            get
+		public string DefaultSymbol
+		{
+			get
 			{
 				return m_DefaultSymbol;
 			}
 
-            set
+			set
 			{
 				m_DefaultSymbol = value;
 			}
-        }
-        
-        public double PreAdder
-        {
-            get
+		}
+		
+		public double PreAdder
+		{
+			get
 			{
 				return m_PreAdder;
 			}
 
-            set
+			set
 			{
 				m_PreAdder = value;
 			}
-        }
-        
-        public double Adder
-        {
-            get
+		}
+		
+		public double Adder
+		{
+			get
 			{
 				return m_Adder;
 			}
 
-            set
+			set
 			{
 				m_Adder = value;
 			}
-        }
+		}
 
-        public double Multiplier
-        {
-            get
+		public double Multiplier
+		{
+			get
 			{
 				return m_Multiplier;
 			}
 
-            set
+			set
 			{
 				m_Multiplier = value;
 			}
-        }
+		}
+
+		#endregion
 
 	} // End class.
 } // End namespace.

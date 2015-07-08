@@ -34,19 +34,21 @@ namespace Thor.Units
 	/// </summary>
 	public class DataString
 	{
-		private DataStringFlags m_flags;
-		private UnitConverter m_uc;
+		#region Members
 
-		private double m_maxbound;
-		private double m_minbound;
+		private DataStringFlags						m_flags;
+		private UnitConverter						m_uc;
 
-		private double m_value;
-		private IUnitEntry m_unit;
+		private double								m_maxbound;
+		private double								m_minbound;
 
-		public event EventHandler OnValueChanged;
-		public event EventHandler OnUnitChanged;
+		private double								m_value;
+		private IUnitEntry							m_unit;
 
-		asdf[i]
+		public event EventHandler					OnValueChanged;
+		public event EventHandler					OnUnitChanged;
+
+		#endregion
 
 		internal DataString(UnitConverter uc, string unitSymbol)
 		{
@@ -433,5 +435,6 @@ namespace Thor.Units
 			return result;
 		}
 		#endregion
-	}
-}
+
+	} // End class.
+} // End namespace.

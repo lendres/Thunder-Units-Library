@@ -64,7 +64,7 @@ namespace Thor.Units
 			string[] names = new string[this.Count];
 
 			int i = 0;
-			foreach (UnitEntry unitEntry in this.Dictionary)
+			foreach (UnitEntry unitEntry in this.Dictionary.Values)
 			{
 				names[i++] = unitEntry.Name;
 			}

@@ -20,7 +20,7 @@ namespace Thor.Units
 		/// </summary>
 		public GroupTable()
 		{
-			this.Clear();
+			Clear();
 		}
 
 		/// <summary>
@@ -60,24 +60,40 @@ namespace Thor.Units
 		/// <returns>Array of UnitGroup objects representing all of the groups in the group table.</returns>
 		public UnitGroup[] GetAllGroups()
 		{
-			UnitGroup[] retval;
+			UnitGroup[] unitGroups;
 
-			//Lock the table (so only we can use it)
-			lock(this.Dictionary.SyncRoot)
+			// Lock the table (so only we can use it).
+			lock (this.Dictionary.SyncRoot)
 			{
-				retval = new UnitGroup[this.Count];
+				unitGroups = new UnitGroup[this.Count];
 				int i = 0;
 
-                //Build an array of all the groups in the table
-				foreach(UnitGroup grp in this.Dictionary.Values)
+				//Build an array of all the groups in the table
+				foreach (UnitGroup unitGroup in this.Dictionary.Values)
 				{
-					retval[i] = grp;
+					unitGroups[i] = unitGroup;
 					i++;
 				}
 			}
-            
-			//Return our findings.
-			return retval;
+			
+			// Return our findings.
+			return unitGroups;
+		}
+
+		/// <summary>
+		/// Gets an array of the names of the groups in the group table.
+		/// </summary>
+		public string[] GetAllGroupNames()
+		{
+			string[] names = new string[this.Count];
+
+			int i = 0;
+			foreach (UnitGroup unitGroup in this.Dictionary.Values)
+			{
+				names[i++] = unitGroup.Name;
+			}
+
+			return names;
 		}
 
 	} // End class.

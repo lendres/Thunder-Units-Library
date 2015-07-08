@@ -65,9 +65,5 @@ namespace Thor.Units
 
 		#endregion
 
-		#region XML
-
-		#endregion
-
 	} // End class.
 } // End namespace.

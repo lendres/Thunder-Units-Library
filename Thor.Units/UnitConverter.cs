@@ -772,5 +772,6 @@ namespace Thor.Units
 			DataString ds = new DataString(this, unitSymbol);
 			return ds;
 		}
-	}
-}
+
+	} // End class.
+} // End namespace.
