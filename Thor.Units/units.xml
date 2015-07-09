@@ -341,7 +341,7 @@
 		</Unit>
 		
 		<!-- Units below here represent the smaller length units -->
-		<Unit name="Thou">
+		<Unit name="Thousandth">
 			<Multiply>2.54e-005</Multiply>
 		</Unit>
 

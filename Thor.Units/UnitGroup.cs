@@ -42,6 +42,19 @@ namespace Thor.Units
 			}
 		}
 
+		public UnitTable Units
+		{
+			get
+			{
+				return m_Units;
+			}
+
+			set
+			{
+				m_Units = value;
+			}
+		}
+
 		#endregion
 
 		#region Methods

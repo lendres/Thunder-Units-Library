@@ -32,12 +32,16 @@ namespace Thor.Units
 			{
 				groupName = groupName.ToLower();
 
-				//If we contain a group matching the key then return it.
-				if(this.Dictionary.Contains(groupName))
+				// If we contain a group matching the key then return it.
+				if (this.Dictionary.Contains(groupName))
+				{
 					return (UnitGroup)this.Dictionary[groupName];
+				}
 				else
-					//Symbol doesn't exist.
+				{
+					// Symbol doesn't exist.
 					return null;
+				}
 			}
 			
 			set
@@ -45,9 +49,7 @@ namespace Thor.Units
 				groupName = groupName.ToLower();
 
 				//Already added? Warn developer (this is probably not a good thing)
-				Debug.Assert( (!this.Dictionary.Contains(groupName)),
-					"Group table warning",
-					String.Format("The unit group with name '{0}' has been overwritten.", groupName) );
+				Debug.Assert( (!this.Dictionary.Contains(groupName)), "Group table warning", String.Format("The unit group with name '{0}' has been overwritten.", groupName) );
 
 				//Link the group to its name
 				this.Dictionary[groupName] = value;

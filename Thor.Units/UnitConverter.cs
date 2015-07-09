@@ -80,7 +80,7 @@ namespace Thor.Units
 			}
 		}
 				
-		public GroupTable UnitGroups
+		public GroupTable Groups
 		{
 			get
 			{
@@ -129,14 +129,14 @@ namespace Thor.Units
 			this.m_Units.Clear();
 
 			//Add the blank unit.
-			UnitEntry unit = new UnitEntry();
-			unit.DefaultSymbol = "";
-			unit.Name = "No Unit";
-			this.m_Units[unit.Name] = unit;
-			this.m_SymbolTable[""] = unit;
+			//UnitEntry unit = new UnitEntry();
+			//unit.DefaultSymbol = "";
+			//unit.Name = "No Unit";
+			//this.m_Units[unit.Name] = unit;
+			//this.m_SymbolTable[""] = unit;
 
-			this.CreateNewGroup("BuiltIn");
-			this.m_UnitGroups["BuiltIn"].AddUnit(unit);
+			//this.CreateNewGroup("BuiltIn");
+			//this.m_UnitGroups["BuiltIn"].AddUnit(unit);
 		}
 
 		#endregion

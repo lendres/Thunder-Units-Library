@@ -23,6 +23,9 @@ namespace Thor.Units
 
 		#region Construction
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
 		public UnitEntry()
 		{
 			m_Name          = "";
