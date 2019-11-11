@@ -94,7 +94,11 @@
     <Compile Include="DataString.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Events.cs">
+    <Compile Include="InterfaceFactory.cs" />
+    <Compile Include="IUnitConverter.cs" />
+    <Compile Include="UnitFileException.cs" />
+    <Compile Include="UnitEventArgs.cs" />
+    <Compile Include="Delegates.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GroupTable.cs">

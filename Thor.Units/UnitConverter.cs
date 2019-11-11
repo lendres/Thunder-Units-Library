@@ -1,104 +1,43 @@
 /*
  * Thunder Unit conversion library
  * (C)Copyright 2005/2006 Robert Harwood <robharwood@runbox.com>
- * 
+ *
  * Please see included license.txt file for information on redistribution and usage.
  */
 using System;
-using System.Collections;
-using System.Xml;
-using System.IO;
 using System.Diagnostics;
-using System.Globalization;
+using System.IO;
+using System.Xml;
 
 namespace Thor.Units
 {
-	/// <summary>
-	/// Public class that allows instantiation of the unit converter.
-	/// </summary>
-	public class InterfaceFactory
-	{
-		public static IUnitConverter CreateUnitConverter()
-		{
-			return new UnitConverter();
-		}
-	}
-
-	/// <summary>
-	/// Interface to the unit converter.
-	/// </summary>
-	public interface IUnitConverter
-	{
-		bool CompatibleUnits(string unitSymbol1, string unitSymbol2);
-		UnitResult ConvertUnits(double val, string unitfrom, string unitto, out double output);
-		UnitResult ConvertToStandard(double val, string unitfrom, out double output);
-		UnitResult ConvertFromStandard(double val, string unitto, out double output);
-		DataString CreateDataString(string unitSymbol);
-		DataString CreateDataString();
-		IUnitEntry GetUnitByName(string unitName);
-		IUnitEntry GetUnitBySymbol(string unitSymbol);
-		void InitTables();
-		UnitResult LoadUnitsFile(string filePath);
-		event UnitEventHandler OnError;
-		UnitResult ParseUnitString(string input, out double val, out string unit);
-	}
-
 	/// <summary>
 	/// Unit conversion class, contains methods for loading a unit file
 	/// and converting units.
 	/// </summary>
 	public class UnitConverter : IUnitConverter
 	{
-		#region[Members
-
-		public const double			UNITFILE_VERSION			=	1.0;
-		public const double			FAILSAFE_VALUE				=	System.Double.NaN;
-		private SymbolTable			m_SymbolTable;
-		private UnitTable			m_Units;
-		private GroupTable			m_UnitGroups;
-		private XmlDocument			m_UnitsFile;
-		private string				m_CurUnitFileName;
-		private double				m_CurUnitsFileVersion;
-
-		#endregion
-
 		#region Events
-		#endregion
-
-		#region Properties
-
-		public UnitTable Units
-		{
-			get
-			{
-				return m_Units;
-			}
-
-			set
-			{
-				m_Units = value;
-			}
-		}
-				
-		public GroupTable Groups
-		{
-			get
-			{
-				return m_UnitGroups;
-			}
-
-			set
-			{
-				m_UnitGroups = value;
-			}
-		}
-
-		#endregion
 
 		/// <summary>
 		/// Called when an error occurs in the unit converter.
 		/// </summary>
 		public event UnitEventHandler OnError;
+
+		#endregion
+
+		#region Members
+
+		public const double         UNITFILE_VERSION            =   1.0;
+		public const double         FAILSAFE_VALUE              =   System.Double.NaN;
+		private SymbolTable         m_SymbolTable;
+		private UnitTable           m_Units;
+		private GroupTable          m_UnitGroups;
+		private XmlDocument         m_UnitsFile;
+		private string              m_CurUnitFileName;
+		private double              m_CurUnitsFileVersion;
+
+		#endregion
 
 		#region Construction
 
@@ -121,27 +60,56 @@ namespace Thor.Units
 			InitTables();
 		}
 
+		/// <summary>
+		/// Initialization.
+		/// </summary>
 		public void InitTables()
 		{
-			//Clear everything out
+			// Clear everything out.
 			this.m_SymbolTable.Clear();
 			this.m_UnitGroups.Clear();
 			this.m_Units.Clear();
-
-			//Add the blank unit.
-			//UnitEntry unit = new UnitEntry();
-			//unit.DefaultSymbol = "";
-			//unit.Name = "No Unit";
-			//this.m_Units[unit.Name] = unit;
-			//this.m_SymbolTable[""] = unit;
-
-			//this.CreateNewGroup("BuiltIn");
-			//this.m_UnitGroups["BuiltIn"].AddUnit(unit);
 		}
 
 		#endregion
 
-		#region XML unit file methods
+		#region Properties
+
+		/// <summary>
+		/// Units.
+		/// </summary>
+		public UnitTable Units
+		{
+			get
+			{
+				return m_Units;
+			}
+
+			set
+			{
+				m_Units = value;
+			}
+		}
+
+		/// <summary>
+		/// Groups.
+		/// </summary>
+		public GroupTable Groups
+		{
+			get
+			{
+				return m_UnitGroups;
+			}
+
+			set
+			{
+				m_UnitGroups = value;
+			}
+		}
+
+		#endregion
+
+		#region XML Unit File Methods
 
 		/// <summary>
 		/// Sends a specially formed error message regarding the loading of a unit file.
@@ -155,7 +123,9 @@ namespace Thor.Units
 			error += message;
 
 			if (args != null)
+			{
 				error = String.Format(error, args);
+			}
 
 			OnError(this, new UnitEventArgs(error));
 		}
@@ -169,9 +139,11 @@ namespace Thor.Units
 		{
 			string error = "";
 
-			//Make sure the units file exists.
+			// Make sure the units file exists.
 			if (!File.Exists(filePath))
+			{
 				return UnitResult.FileNotFound;
+			}
 
 			try
 			{
@@ -188,16 +160,16 @@ namespace Thor.Units
 				throw new UnitFileException(error, ex.Message);
 			}
 
-			//Reinitialise the data tables
+			// Reinitialise the data tables.
 			InitTables();
 
 			m_CurUnitFileName = "";
 			m_CurUnitsFileVersion = 0.0;
 
-			//Get a reference to a list of the XML data
+			// Get a reference to a list of the XML data.
 			XmlNodeList xmlData = m_UnitsFile.GetElementsByTagName("*");
 
-			//No XML nodes? This is wrong.
+			// No XML nodes? This is wrong.
 			if (xmlData.Count == 0)
 			{
 				error = "Error parsing units file '{0}' - file contains no data.";
@@ -205,10 +177,10 @@ namespace Thor.Units
 				throw new UnitFileException(error);
 			}
 
-			//Get the root node.
+			// Get the root node.
 			System.Xml.XmlNode root = xmlData[0];
 
-			//Does the file not start with a "UnitFile" node? We have problems.
+			// Does the file not start with a "UnitFile" node? We have problems.
 			if (root.Name.ToLower() != "unitfile")
 			{
 				error = "Error parsing units file '{0}' - the file appears corrupt or incomplete.";
@@ -216,9 +188,11 @@ namespace Thor.Units
 				throw new UnitFileException(error);
 			}
 
-			//Store off the name of the units file if there is one
+			// Store off the name of the units file if there is one.
 			if (root.Attributes["name"] != null)
+			{
 				m_CurUnitFileName = root.Attributes["name"].Value;
+			}
 			else
 			{
 				//Units file has no internal name set on it.
@@ -226,7 +200,7 @@ namespace Thor.Units
 				m_CurUnitFileName = "Units";
 			}
 
-			//Check units file version
+			// Check units file version.
 			if (root.Attributes["version"] != null)
 			{
 				try
@@ -256,7 +230,7 @@ namespace Thor.Units
 			}
 			else
 			{
-				//No version information was found at all
+				// No version information was found at all.
 				error = "Error parsing '{0}' - file has no version number specified.";
 				error = String.Format(error, filePath);
 				throw new UnitFileException(error);
@@ -264,7 +238,7 @@ namespace Thor.Units
 
 			int i = 0;
 
-			//Parse all the unit groups and add them
+			// Parse all the unit groups and add them.
 			for (i = 0; i < root.ChildNodes.Count; i++)
 			{
 				XmlNode groupnode = root.ChildNodes[i];
@@ -279,7 +253,7 @@ namespace Thor.Units
 					ParseGroupXMLNode(filePath, groupnode);
 			}
 
-			//We were successful.
+			// We were successful.
 			return UnitResult.NoError;
 		}
 
@@ -292,7 +266,7 @@ namespace Thor.Units
 		{
 			int i = 0;
 
-			//Check the group has a name.
+			// Check the group has a name.
 			if (groupnode.Attributes["name"] == null)
 			{
 				SendUnitFileWarning("found a group with no name, ignoring group.", filePath, null);
@@ -300,38 +274,44 @@ namespace Thor.Units
 			}
 			else
 			{
-				//Create the group
+				// Create the group.
 				UnitResult res = CreateNewGroup(groupnode.Attributes["name"].Value);
 
-				//Make sure the group was created
+				// Make sure the group was created.
 				if (res != UnitResult.NoError)
 				{
 					SendUnitFileWarning("failed to create group entry, skipping group.", filePath, null);
 					return UnitResult.GenericError;
 				}
 
-				//Get a reference to the group we just created.
+				// Get a reference to the group we just created.
 				UnitGroup group = this.m_UnitGroups[groupnode.Attributes["name"].Value];
 
-				//Parse all the units
+				// Parse all the units.
 				for (i = 0; i < groupnode.ChildNodes.Count; i++)
 				{
-					//Get the node reference for the current unit.
+					// Get the node reference for the current unit.
 					XmlNode unitnode = groupnode.ChildNodes[i];
 
-					//Ignore comments.
+					// Ignore comments.
 					if (unitnode.Name.ToLower() == "#comment")
+					{
 						continue;
+					}
 
 					if (unitnode.Name.ToLower() != "unit")
+					{
 						SendUnitFileWarning("bad tag found while parsing units of group '{0}' (tag was '{1}'), tag ignored.", filePath, new object[] { group.Name, unitnode.Name });
+					}
 					else
+					{
 						//Parse out the unit
 						res = ParseUnitXMLNode(filePath, group, unitnode);
+					}
 				}
 			}
 
-			//Completed successfully
+			// Completed successfully.
 			return UnitResult.NoError;
 		}
 
@@ -347,25 +327,25 @@ namespace Thor.Units
 
 			UnitEntry unit = new UnitEntry();
 
-			//Make sure the unit has a name
+			// Make sure the unit has a name.
 			if (unitnode.Attributes["name"] == null)
 			{
 				SendUnitFileWarning("found a unit in group '{0}' with no name, ignored.", filePath, new object[] { group.Name });
 				return UnitResult.GenericError;
 			}
 
-			//Store off the name
+			// Store off the name.
 			unit.Name = unitnode.Attributes["name"].Value;
 			unit.DefaultSymbol = unit.Name.ToLower();
 
-			//Dont allow duplicate units
+			// Don't allow duplicate units.
 			if (GetUnitByName(unit.Name) != null)
 			{
 				SendUnitFileWarning("duplicate unit with name '{0}' was found and ignored.", filePath, new object[] { unit.Name });
 				return UnitResult.UnitExists;
 			}
 
-			//Get every unit property
+			// Get every unit property.
 			for (i = 0; i < unitnode.ChildNodes.Count; i++)
 			{
 				XmlNode unitprop = unitnode.ChildNodes[i];
@@ -380,16 +360,28 @@ namespace Thor.Units
 					{
 						double x;
 						if (ParseNumberString(unitprop.InnerText, out x) != UnitResult.NoError)
+						{
 							throw new System.Exception();
+						}
 
 						unit.Multiplier = x;
 
 						//unit.m_Multiplier = Convert.ToDouble(unitprop.InnerText);
 					}
-					else if (unitprop.Name.ToLower() == "add")
-						unit.Adder = Convert.ToDouble(unitprop.InnerText);
-					else if (unitprop.Name.ToLower() == "preadd")
-						unit.PreAdder = Convert.ToDouble(unitprop.InnerText);
+					else
+					{
+						if (unitprop.Name.ToLower() == "add")
+						{
+							unit.Adder = Convert.ToDouble(unitprop.InnerText);
+						}
+						else
+						{
+							if (unitprop.Name.ToLower() == "preadd")
+							{
+								unit.PreAdder = Convert.ToDouble(unitprop.InnerText);
+							}
+						}
+					}
 				}
 				catch
 				{
@@ -397,40 +389,48 @@ namespace Thor.Units
 					return UnitResult.GenericError;
 				}
 
-				//Parse the symbol properties
+				// Parse the symbol properties.
 				if (unitprop.Name.ToLower() == "symbol")
 				{
 					//Put the value into the symbol table
 					if ((unitprop.InnerText != "") && (unitprop.InnerText != null))
 					{
 						if (this.m_SymbolTable[unitprop.InnerText] != null)
+						{
 							SendUnitFileWarning("while parsing unit '{0}' - a duplicate symbol was found and ignored ({1}).", filePath, new object[] { unit.Name, unitprop.InnerText });
+						}
 						else
 						{
 							this.m_SymbolTable[unitprop.InnerText] = unit;
 
-							//Is this unit the default unit?
+							// Is this unit the default unit?
 							if (unitprop.Attributes["default"] != null)
+							{
 								unit.DefaultSymbol = unitprop.InnerText;
+							}
 						}
 					}
 					else
+					{
 						SendUnitFileWarning("unit '{0}' has an invalid symbol specified, symbol skipped.", filePath, new object[] { unit.Name });
+					}
 				}
 			}
 
-			//Add the unit to the unit table.
-			this.m_Units[unit.Name] = unit;
+			// Add the unit to the unit table.
+			m_Units[unit.Name] = unit;
 
-			//Add the unit to the group
+			// Add the unit to the group
 			AddUnitToGroup(unit.Name, group.Name);
 
-			//All done!
+			// All done!
 			return UnitResult.NoError;
 		}
+
 		#endregion
 
-		#region Unit related methods
+		#region Unit Related Methods
+
 		/// <summary>
 		/// Given the full name of the unit, returns the unit entry.
 		/// </summary>
@@ -450,13 +450,19 @@ namespace Thor.Units
 		{
 			//First check to see if they used the actual name of a unit then look at the symbol table.
 			if (this.m_Units[unitSymbol] != null)
-				return this.m_Units[unitSymbol];
+			{
+				return m_Units[unitSymbol];
+			}
 			else
+			{
 				return m_SymbolTable[unitSymbol];
+			}
 		}
+
 		#endregion
 
-		#region Group related methods
+		#region Group Related Methods
+
 		/// <summary>
 		/// Gets a value that determines whether the given units are compatible or not.
 		/// </summary>
@@ -465,13 +471,24 @@ namespace Thor.Units
 		/// <returns>True if units are compatible, else false.</returns>
 		public bool CompatibleUnits(string unitSymbol1, string unitSymbol2)
 		{
-			IUnitEntry u1 = this.GetUnitBySymbol(unitSymbol1);
-			IUnitEntry u2 = this.GetUnitBySymbol(unitSymbol2);
+			IUnitEntry u1 = GetUnitBySymbol(unitSymbol1);
+			IUnitEntry u2 = GetUnitBySymbol(unitSymbol2);
 
-			if ((u1 == null) || (u2 == null))
+			if (u1 == null || u2 == null)
+			{
 				return false;
+			}
 
-			return (this.GetUnitGroup(u1.Name) == this.GetUnitGroup(u2.Name));
+			return GetUnitGroup(u1.Name) == GetUnitGroup(u2.Name);
+		}
+
+		/// <summary>
+		/// Returns a list of all the units in a given group.
+		/// </summary>
+		/// <param name="groupName">Name of group to extract names from.</param>
+		public string[] GetListOfUnitsInGroup(string groupName)
+		{
+			return m_UnitGroups[groupName].Units.GetAllUnitNames();
 		}
 
 		/// <summary>
@@ -486,7 +503,7 @@ namespace Thor.Units
 			newgroup.Name = groupName;
 
 			//Add it to the group table
-			this.m_UnitGroups[groupName] = newgroup;
+			m_UnitGroups[groupName] = newgroup;
 
 			return UnitResult.NoError;
 		}
@@ -502,15 +519,19 @@ namespace Thor.Units
 			UnitEntry unit = this.m_Units[unitName];
 			UnitGroup group = this.m_UnitGroups[groupName];
 
-			//Make sure the unit exists.
+			// Make sure the unit exists.
 			if (unit == null)
+			{
 				return UnitResult.UnitNotFound;
+			}
 
-			//Make sure the group exists.
+			// Make sure the group exists.
 			if (group == null)
+			{
 				return UnitResult.GroupNotFound;
+			}
 
-			//Add the unit.
+			// Add the unit.
 			group.AddUnit(unit);
 
 			return UnitResult.NoError;
@@ -523,25 +544,31 @@ namespace Thor.Units
 		/// <returns>The group the unit is in, or null if the unit is not valid.</returns>
 		private UnitGroup GetUnitGroup(string unitName)
 		{
-			//Does the unit even exist?
+			// Does the unit even exist?
 			if (this.m_Units[unitName] == null)
+			{
 				return null;
+			}
 
 			//Iterate through every group
 			UnitGroup[] groups = this.m_UnitGroups.GetAllGroups();
 			foreach (UnitGroup group in groups)
 			{
 				if (group.IsInGroup(unitName))
+				{
 					return group;
+				}
 			}
 
 			//Should never happen.
 			Debug.Fail("Unit error", "A unit that does not belong to any group has been detected in GetUnitGroup() - the unit was '" + unitName + "'.");
 			return null;
 		}
+
 		#endregion
 
-		#region Conversion methods
+		#region Conversion Methods
+
 		/// <summary>
 		/// Given a value and the current unit, converts the value back to the standard.
 		/// </summary>
@@ -599,20 +626,28 @@ namespace Thor.Units
 
 			//Make sure both units are real units.
 			if ((unit_from == null) || (unit_to == null))
+			{
 				return UnitResult.BadUnit;
+			}
 
 			//Make sure the units are of the same group
 			if (!this.CompatibleUnits(unit_from.Name, unit_to.Name))
+			{
 				return UnitResult.UnitMismatch;
+			}
 
 			UnitResult conv_res;
 			conv_res = ConvertToStandard(x, unit_from.Name, out x);
 			if (conv_res != UnitResult.NoError)
+			{
 				return conv_res;
+			}
 
 			conv_res = ConvertFromStandard(x, unit_to.Name, out x);
 			if (conv_res != UnitResult.NoError)
+			{
 				return conv_res;
+			}
 
 			output = x;
 
@@ -637,7 +672,9 @@ namespace Thor.Units
 
 			//Make sure both units are real units.
 			if (unit_to == null)
+			{
 				return UnitResult.BadUnit;
+			}
 
 			try
 			{
@@ -651,33 +688,35 @@ namespace Thor.Units
 			}
 			catch
 			{
-				return UnitResult.BadValue; //Probably overflowed or something.
+				// Probably overflowed or something.
+				return UnitResult.BadValue;
 			}
 
 			return UnitResult.NoError;
 		}
+
 		#endregion
 
-		#region Parsing routines
+		#region Parsing Routines
+
 		/// <summary>
 		/// Parses a number string with operators.
 		/// </summary>
 		/// <param name="input">String containing numbers and operators.</param>
 		/// <param name="val">Output value.</param>
-		/// <returns>Unit result code.</returns>
 		private UnitResult ParseNumberString(string input, out double val)
 		{
-			//Default value
+			// Default value.
 			val = 0.0;
 
-			//Split the numbers on the ^ operator
+			// Split the numbers on the ^ operator.
 			string[] numbers;
 			numbers = input.Split(new char[] { '^' });
 
 			if (numbers.Length == 1)
 			{
-				//Only one value, so there was no ^ operator present
-				//so just return the one number.
+				// Only one value, so there was no ^ operator present.
+				// so just return the one number.
 				try
 				{
 					val = Convert.ToDouble(numbers[0]);
@@ -689,7 +728,7 @@ namespace Thor.Units
 			}
 			else
 			{
-				//There is a ^ operator, so try to use it.
+				// There is a ^ operator, so try to use it.
 				try
 				{
 					val = Convert.ToDouble(numbers[0]);
@@ -714,30 +753,39 @@ namespace Thor.Units
 		/// <returns>Unit result code.</returns>
 		public UnitResult ParseUnitString(string input, out double val, out string unit)
 		{
-			//Defaults
+			// Defaults.
 			val = 0.0;
 			unit = "";
 
 			if (input == "")
+			{
 				return UnitResult.NoError;
+			}
 
 			int i = 0;
 
-			string s1 = "", s2 = "";
+			string s1 = "";
+			string s2 = "";
 
-			//Look for the first letter or punctuation character.
+			// Look for the first letter or punctuation character.
 			for (i = 0; i < input.Length; i++)
+			{
 				if (Char.IsLetter(input, i))// || Char.IsPunctuation(input, i))
+				{
 					break;
+				}
+			}
 
 			s1 = input.Substring(0, i);
 			s1 = s1.Trim();
 			s2 = input.Substring(i);
 			s2 = s2.Trim();
 
-			//No value? default to 0
+			// No value? default to 0.
 			if (s1 == "")
+			{
 				s1 = "0";
+			}
 
 			try
 			{
@@ -749,13 +797,18 @@ namespace Thor.Units
 			}
 
 			if (this.GetUnitBySymbol(s2) == null)
+			{
 				return UnitResult.BadUnit;
+			}
 
 			unit = s2;
 
 			return UnitResult.NoError;
 		}
+
 		#endregion
+
+		#region Data String
 
 		/// <summary>
 		/// Creates a new data string, used as a bridge to the user interface.
@@ -772,6 +825,8 @@ namespace Thor.Units
 			DataString ds = new DataString(this, unitSymbol);
 			return ds;
 		}
+
+		#endregion
 
 	} // End class.
 } // End namespace.
