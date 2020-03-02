@@ -64,7 +64,7 @@ namespace Thor.Units
 				m_DefaultSymbol = value;
 			}
 		}
-		
+
 		public double PreAdder
 		{
 			get
@@ -77,7 +77,7 @@ namespace Thor.Units
 				m_PreAdder = value;
 			}
 		}
-		
+
 		public double Adder
 		{
 			get

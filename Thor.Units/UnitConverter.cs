@@ -160,7 +160,7 @@ namespace Thor.Units
 				throw new UnitFileException(error, ex.Message);
 			}
 
-			// Reinitialise the data tables.
+			// Reinitialize the data tables.
 			InitTables();
 
 			m_CurUnitFileName = "";
@@ -436,7 +436,7 @@ namespace Thor.Units
 		/// </summary>
 		/// <param name="unitName">Name of the unit.</param>
 		/// <returns>Reference to the unit entry, or null if not found.</returns>
-		public IUnitEntry GetUnitByName(string unitName)
+		public UnitEntry GetUnitByName(string unitName)
 		{
 			return m_Units[unitName];
 		}
@@ -446,7 +446,7 @@ namespace Thor.Units
 		/// </summary>
 		/// <param name="unitSymbol">Symbol of the unit.</param>
 		/// <returns>Reference to the unit entry, or null if symbol does not exist.</returns>
-		public IUnitEntry GetUnitBySymbol(string unitSymbol)
+		public UnitEntry GetUnitBySymbol(string unitSymbol)
 		{
 			//First check to see if they used the actual name of a unit then look at the symbol table.
 			if (this.m_Units[unitSymbol] != null)

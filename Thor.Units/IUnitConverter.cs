@@ -24,9 +24,9 @@ namespace Thor.Units
 
 		DataString CreateDataString();
 
-		IUnitEntry GetUnitByName(string unitName);
+		UnitEntry GetUnitByName(string unitName);
 
-		IUnitEntry GetUnitBySymbol(string unitSymbol);
+		UnitEntry GetUnitBySymbol(string unitSymbol);
 
 		void InitTables();
 
