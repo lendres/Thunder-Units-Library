@@ -11,8 +11,8 @@ namespace Thor.Units
 	/// Public class that allows instantiation of the unit converter.
 	/// </summary>
 	/// <remarks>
-	/// The concepts of an interface and interface factory lead me to believe that this was designed with some expansion in mind.
-	/// But since we don't use that, maybe we simplify this and just have the UnitConvert class with a public constructor.
+	/// LAE: The concepts of an interface and interface factory lead me to believe that this was designed with some expansion in
+	/// mind.  But since we don't use that, maybe we simplify this and just have the UnitConvert class with a public constructor.
 	/// </remarks>
 	public class InterfaceFactory
 	{

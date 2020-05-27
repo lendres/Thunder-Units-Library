@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
-using System.Xml.Serialization;
-
-namespace Thor.Units
+﻿namespace Thor.Units
 {
 	/// <summary>
 	/// Represents a single unit loaded from the units file.

@@ -15,6 +15,8 @@ namespace Thor.Units
 	/// </summary>
 	public class GroupTable : DictionaryBase
 	{
+		#region Construction
+
 		/// <summary>
 		/// Constructor, clears the table and readies it for use.
 		/// </summary>
@@ -22,6 +24,10 @@ namespace Thor.Units
 		{
 			Clear();
 		}
+
+		#endregion
+
+		#region Properties
 
 		/// <summary>
 		/// Given a unit name as the key, returns the associated unit entry.
@@ -56,6 +62,10 @@ namespace Thor.Units
 			} 
 		}
 
+		#endregion
+
+		#region Methods
+
 		/// <summary>
 		/// Gets an array of all the groups in the group table.
 		/// </summary>
@@ -70,7 +80,7 @@ namespace Thor.Units
 				unitGroups = new UnitGroup[this.Count];
 				int i = 0;
 
-				//Build an array of all the groups in the table
+				// Build an array of all the groups in the table.
 				foreach (UnitGroup unitGroup in this.Dictionary.Values)
 				{
 					unitGroups[i] = unitGroup;
@@ -97,6 +107,8 @@ namespace Thor.Units
 
 			return names;
 		}
+
+		#endregion
 
 	} // End class.
 } // End namespace.

@@ -46,12 +46,12 @@ namespace Thor.Units
 		/// </summary>
 		public UnitConverter()
 		{
-			//Set up the tables we need
+			// Set up the tables we need
 			m_SymbolTable = new SymbolTable();
 			m_Units       = new UnitTable();
 			m_UnitGroups  = new GroupTable();
 
-			//Create an Xml document to hold the units file in.
+			// Create an Xml document to hold the units file in.
 			m_UnitsFile = new XmlDocument();
 			m_CurUnitsFileVersion = 0.0;
 
@@ -147,16 +147,16 @@ namespace Thor.Units
 
 			try
 			{
-				//Attempt to load the unit file...
+				// Attempt to load the unit file...
 				m_UnitsFile.Load(filePath);
 			}
 			catch (XmlException ex)
 			{
-				//Create the exception string.
+				// Create the exception string.
 				error = "Error parsing '{0}' at line {1}, position {2}.";
 				error = String.Format(error, filePath, ex.LineNumber, ex.LinePosition);
 
-				//Throw the exception.
+				// Throw the exception.
 				throw new UnitFileException(error, ex.Message);
 			}
 
@@ -195,7 +195,7 @@ namespace Thor.Units
 			}
 			else
 			{
-				//Units file has no internal name set on it.
+				// Units file has no internal name set on it.
 				SendUnitFileWarning("file has no internal units name - using default.", filePath, null);
 				m_CurUnitFileName = "Units";
 			}
@@ -214,7 +214,7 @@ namespace Thor.Units
 
 				if (m_CurUnitsFileVersion == 0.0)
 				{
-					//File version is 0.0, probably failed to convert to a double.
+					// File version is 0.0, probably failed to convert to a double.
 					error = "Error parsing '{0}' - file has no valid version number.";
 					error = String.Format(error, filePath);
 					throw new UnitFileException(error);
@@ -222,7 +222,7 @@ namespace Thor.Units
 
 				if (m_CurUnitsFileVersion > UNITFILE_VERSION)
 				{
-					//File version is greater than the maximum we support.
+					// File version is greater than the maximum we support.
 					error = "Error parsing '{0}' - file version indicates it is made for a newer version of the unit conversion library.";
 					error = String.Format(error, filePath);
 					throw new UnitFileException(error);
@@ -243,14 +243,20 @@ namespace Thor.Units
 			{
 				XmlNode groupnode = root.ChildNodes[i];
 
-				//Ignore comments.
+				// Ignore comments.
 				if (groupnode.Name.ToLower() == "#comment")
+				{
 					continue;
+				}
 
 				if (groupnode.Name.ToLower() != "unitgroup")
+				{
 					SendUnitFileWarning("bad tag found while parsing groups (tag was '{0}'), tag ignored.", filePath, new object[] { groupnode.Name });
+				}
 				else
+				{
 					ParseGroupXMLNode(filePath, groupnode);
+				}
 			}
 
 			// We were successful.
@@ -305,7 +311,7 @@ namespace Thor.Units
 					}
 					else
 					{
-						//Parse out the unit
+						// Parse out the unit
 						res = ParseUnitXMLNode(filePath, group, unitnode);
 					}
 				}
@@ -448,7 +454,7 @@ namespace Thor.Units
 		/// <returns>Reference to the unit entry, or null if symbol does not exist.</returns>
 		public UnitEntry GetUnitBySymbol(string unitSymbol)
 		{
-			//First check to see if they used the actual name of a unit then look at the symbol table.
+			// First check to see if they used the actual name of a unit then look at the symbol table.
 			if (this.m_Units[unitSymbol] != null)
 			{
 				return m_Units[unitSymbol];
@@ -498,11 +504,11 @@ namespace Thor.Units
 		/// <returns>Unit result value.</returns>
 		private UnitResult CreateNewGroup(string groupName)
 		{
-			//Create the new group
+			// Create the new group
 			UnitGroup newgroup = new UnitGroup();
 			newgroup.Name = groupName;
 
-			//Add it to the group table
+			// Add it to the group table
 			m_UnitGroups[groupName] = newgroup;
 
 			return UnitResult.NoError;
@@ -550,7 +556,7 @@ namespace Thor.Units
 				return null;
 			}
 
-			//Iterate through every group
+			// Iterate through every group
 			UnitGroup[] groups = this.m_UnitGroups.GetAllGroups();
 			foreach (UnitGroup group in groups)
 			{
@@ -560,7 +566,7 @@ namespace Thor.Units
 				}
 			}
 
-			//Should never happen.
+			// Should never happen.
 			Debug.Fail("Unit error", "A unit that does not belong to any group has been detected in GetUnitGroup() - the unit was '" + unitName + "'.");
 			return null;
 		}
@@ -580,18 +586,18 @@ namespace Thor.Units
 		{
 			double x = val;
 
-			//Default to the fail safe value.
+			// Default to the fail safe value.
 			output = FAILSAFE_VALUE;
 
 			IUnitEntry unit_from = GetUnitBySymbol(unitfrom);
 
-			//Make sure both units are real units.
+			// Make sure both units are real units.
 			if (unit_from == null)
 				return UnitResult.BadUnit;
 
 			try
 			{
-				//Convert the value back to the standard
+				// Convert the value back to the standard
 				x = x + unit_from.PreAdder;
 				if (unit_from.Multiplier > 0.0)
 					x = x * unit_from.Multiplier;
@@ -601,7 +607,8 @@ namespace Thor.Units
 			}
 			catch
 			{
-				return UnitResult.BadValue; //Probably overflowed or something.
+				// Probably overflowed or something.
+				return UnitResult.BadValue;
 			}
 			return UnitResult.NoError;
 		}
@@ -618,19 +625,19 @@ namespace Thor.Units
 		{
 			double x = val;
 
-			//Default to the fail safe value.
+			// Default to the fail safe value.
 			output = FAILSAFE_VALUE;
 
 			IUnitEntry unit_from = GetUnitBySymbol(unitfrom);
 			IUnitEntry unit_to = GetUnitBySymbol(unitto);
 
-			//Make sure both units are real units.
+			// Make sure both units are real units.
 			if ((unit_from == null) || (unit_to == null))
 			{
 				return UnitResult.BadUnit;
 			}
 
-			//Make sure the units are of the same group
+			// Make sure the units are of the same group
 			if (!this.CompatibleUnits(unit_from.Name, unit_to.Name))
 			{
 				return UnitResult.UnitMismatch;
@@ -665,12 +672,12 @@ namespace Thor.Units
 		{
 			double x = val;
 
-			//Default to the fail safe value.
+			// Default to the fail safe value.
 			output = FAILSAFE_VALUE;
 
 			IUnitEntry unit_to = GetUnitBySymbol(unitto);
 
-			//Make sure both units are real units.
+			// Make sure both units are real units.
 			if (unit_to == null)
 			{
 				return UnitResult.BadUnit;
@@ -678,10 +685,12 @@ namespace Thor.Units
 
 			try
 			{
-				//Convert to the new unit from the standard
+				// Convert to the new unit from the standard
 				x = x - unit_to.PreAdder;
 				if (unit_to.Multiplier > 0.0)
+				{
 					x = x * Math.Pow(unit_to.Multiplier, -1);
+				}
 				x = x - unit_to.Adder;
 
 				output = x;

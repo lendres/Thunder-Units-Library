@@ -24,8 +24,8 @@
 		There are various properties units can have including:
 		
 		<PreAdd>		- Value added to the unit value before multiplication
-		<Add>			- Value added to the unit value after multiplication
-		<Multiply>	- Value multipled with the unit value.
+		<Add>			]\- Value added to the unit value after multiplication
+		<Multiply>		- Value multipled with the unit value.
 		<Symbol>		- Alternative symbols for the unit (e.g C - celcius, kg - kilograms etc)
 		
 		+ These properties must be modifiers that convert the unit into the standard unit.
@@ -33,7 +33,7 @@
 		+ The standard unit can be anything you choose. You define it by giving it a modifier that
 		  doesn't effect the value, or no modifier at all. For example in the temperature section, Kelvin
 		  is the base unit (as its only modifier is a multiply by 1). This means that all the other
-		  values in the tempoerature section must have modifiers that convert them into Kelvin.
+		  values in the temperature section must have modifiers that convert them into Kelvin.
 		
 		+ You can make a symbol the default by adding the "default" attribute to a symbol tag.
 		  If you do not set a default, the unit engine uses the full name of the unit as the default symbol.

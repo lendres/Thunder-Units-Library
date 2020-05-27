@@ -72,6 +72,7 @@ namespace Thor.Units
 		/// <summary>
 		/// An input value was too low.
 		/// </summary>
-		ValueTooLow,
-	}
-}
+		ValueTooLow
+
+	} // End enum.
+} // End namespace.

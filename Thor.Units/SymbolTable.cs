@@ -15,6 +15,8 @@ namespace Thor.Units
 	/// </summary>
 	internal class SymbolTable : DictionaryBase
 	{
+		#region Construction
+
 		/// <summary>
 		/// Constructor, clears the table and readies it for use.
 		/// </summary>
@@ -22,6 +24,10 @@ namespace Thor.Units
 		{
 			Clear();
 		}
+
+		#endregion
+
+		#region Properties
 
 		/// <summary>
 		/// Given a symbol as the key, returns the associated unit entry.
@@ -51,6 +57,8 @@ namespace Thor.Units
 				this.Dictionary[symbolName] = value;
 			} 
 		}
+
+		#endregion
 
 	} // End class.
 } // End namespace.
