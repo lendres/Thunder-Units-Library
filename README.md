@@ -14,7 +14,7 @@ https://github.com/lendres/Thunder-Units-Library
 
 ### Original Post
 The original post for the library was at the location below.  It seems this page no longer exists.
-http:// www.codeproject.com/KB/cs/Thunder.aspx
+http://www.codeproject.com/KB/cs/Thunder.aspx
 
 ## Authors
 Original author:
