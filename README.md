@@ -1,3 +1,5 @@
+# Depricated
+This library is considered obsolete.  Please see [DigitalProduction.Units](https://github.com/lendres/DigitalProduction.Units).
 # Thunder-Units-Library
 A library for converting units of measurement (physics or engineering units).  For example, it will convert meters to kilometers or Fahrenheit to Celsius.
 
